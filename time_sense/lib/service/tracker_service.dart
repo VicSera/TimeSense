@@ -25,6 +25,10 @@ class TrackerService {
     }
   }
 
+  void deleteTracker(int id) {
+    trackers.removeWhere((element) => element.id == id);
+  }
+
   List<Tracker> getTrackers() {
     return trackers;
   }

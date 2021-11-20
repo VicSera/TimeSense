@@ -8,12 +8,14 @@ class TrackerList extends StatefulWidget {
     Key? key,
     required this.trackers,
     required this.onSave,
+    required this.onDelete,
     this.onClick
   }) : super(key: key);
 
   final List<Tracker> trackers;
-  final TrackerSavedFunction onSave;
-  final TrackerClickedFunction? onClick;
+  final TrackerFunction onSave;
+  final TrackerFunction onDelete;
+  final TrackerFunction? onClick;
 
   @override
   State<TrackerList> createState() => _TrackerListState();

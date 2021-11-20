@@ -23,11 +23,23 @@ class _TrackerPageState extends State<TrackerPage> {
     });
   }
 
+  void deleteTracker(Tracker tracker) {
+    setState(() {
+      if (tracker.id != null) {
+        widget.trackerService.deleteTracker(tracker.id!);
+      }
+    });
+  }
+
   void openTrackerEditPage(BuildContext context, Tracker? tracker) {
     Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>
-            EditTrackerPage(tracker: tracker, onSave: saveTracker))
+            EditTrackerPage(
+                tracker: tracker,
+                onSave: saveTracker,
+                onDelete: deleteTracker,
+            ))
     );
   }
 
@@ -40,6 +52,7 @@ class _TrackerPageState extends State<TrackerPage> {
       body: TrackerList(
         trackers: widget.trackers,
         onSave: saveTracker,
+        onDelete: deleteTracker,
         onClick: (tracker) => openTrackerEditPage(context, tracker),
       ),
       floatingActionButton: FloatingActionButton(

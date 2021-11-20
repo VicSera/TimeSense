@@ -7,7 +7,7 @@ class TrackerWidget extends StatefulWidget {
   const TrackerWidget({Key? key, required this.tracker, this.onClick}) : super(key: key);
 
   final Tracker tracker;
-  final TrackerClickedFunction? onClick;
+  final TrackerFunction? onClick;
 
   @override
   State<TrackerWidget> createState() => _TrackerWidgetState();

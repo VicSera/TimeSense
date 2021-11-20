@@ -5,10 +5,16 @@ import 'package:time_sense/util/types.dart';
 import 'package:time_sense/widget/dialog/custom_color_picker.dart';
 
 class EditTrackerPage extends StatefulWidget {
-  EditTrackerPage({Key? key, required this.onSave, Tracker? tracker})
+  EditTrackerPage({
+    Key? key,
+    required this.onSave,
+    this.onDelete,
+    Tracker? tracker
+  })
     : tracker = tracker != null ? Tracker.clone(tracker) : Tracker(), super(key: key);
 
-  final TrackerSavedFunction onSave;
+  final TrackerFunction onSave;
+  final TrackerFunction? onDelete;
   final Tracker tracker;
 
   @override
@@ -23,6 +29,26 @@ class _EditTrackerPageState extends State<EditTrackerPage> {
 
   void formChanged() {
     setState(() => enableSave = formKey.currentState!.validate());
+  }
+
+  List<Widget> getFooterButtons() {
+    var saveButton = TextButton(
+        onPressed: enableSave? () {
+          widget.onSave(widget.tracker);
+          Navigator.pop(context);
+        } : null,
+        child: const Text("Save")
+    );
+    var deleteButton = TextButton(
+        onPressed: () {
+          widget.onDelete!(widget.tracker);
+          Navigator.pop(context);
+        },
+        child: const Text("Delete",
+          style: TextStyle(color: Colors.redAccent))
+    );
+
+    return widget.tracker.id == null? [saveButton] : [deleteButton, saveButton];
   }
 
   @override
@@ -103,15 +129,7 @@ class _EditTrackerPageState extends State<EditTrackerPage> {
           ),
         )
       ),
-      persistentFooterButtons: <Widget>[
-        TextButton(
-          onPressed: enableSave? () {
-            widget.onSave(widget.tracker);
-            Navigator.pop(context);
-          } : null,
-          child: const Text("Save")
-        ),
-      ],
+      persistentFooterButtons: getFooterButtons(),
     );
   }
 
