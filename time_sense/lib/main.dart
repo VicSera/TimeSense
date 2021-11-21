@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:time_sense/page/tracker_page.dart';
+import 'package:time_sense/service/timer_service.dart';
 import 'package:time_sense/service/tracker_service.dart';
 
 void main() {
@@ -16,7 +17,10 @@ class TimeSenseApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: TrackerPage(trackerService: TrackerService())
+      home: TrackerPage(
+          trackerService: TrackerService(),
+          timerService: TimerService()
+      )
     );
   }
 }

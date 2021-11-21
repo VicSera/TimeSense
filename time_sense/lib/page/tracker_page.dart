@@ -2,14 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:time_sense/entity/tracker.dart';
 import 'package:time_sense/page/edit_tracker_page.dart';
+import 'package:time_sense/service/timer_service.dart';
 import 'package:time_sense/service/tracker_service.dart';
 import 'package:time_sense/widget/tracker_list.dart';
 
 class TrackerPage extends StatefulWidget {
-  TrackerPage({Key? key, required this.trackerService})
+  TrackerPage({
+    Key? key,
+    required this.trackerService,
+    required this.timerService
+  })
     : trackers = trackerService.getTrackers(), super(key: key);
 
   final TrackerService trackerService;
+  final TimerService timerService;
   List<Tracker> trackers;
 
   @override
@@ -54,6 +60,7 @@ class _TrackerPageState extends State<TrackerPage> {
         onSave: saveTracker,
         onDelete: deleteTracker,
         onClick: (tracker) => openTrackerEditPage(context, tracker),
+        timerService: widget.timerService,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => openTrackerEditPage(context, null),

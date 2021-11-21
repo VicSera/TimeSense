@@ -9,8 +9,9 @@ class Tracker {
     this.description = "",
     this.color = Colors.deepOrange,
     this.nameColor = Colors.black,
-    this.descriptionColor = Colors.black45
-  });
+    this.descriptionColor = Colors.black45,
+    List<DateTime>? logs
+  }) : logs = logs ?? [];
 
   Tracker.clone(Tracker tracker, {int? replaceId}) :
     id = replaceId ?? tracker.id,
@@ -18,7 +19,8 @@ class Tracker {
     description = tracker.description,
     color = tracker.color,
     nameColor = tracker.nameColor,
-    descriptionColor = tracker.descriptionColor;
+    descriptionColor = tracker.descriptionColor,
+    logs = tracker.logs;
 
   final int? id;
   String name;
@@ -26,4 +28,6 @@ class Tracker {
   Color color;
   Color nameColor;
   Color descriptionColor;
+
+  List<DateTime> logs;
 }

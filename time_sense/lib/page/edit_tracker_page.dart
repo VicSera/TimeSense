@@ -10,8 +10,7 @@ class EditTrackerPage extends StatefulWidget {
     required this.onSave,
     this.onDelete,
     Tracker? tracker
-  })
-    : tracker = tracker != null ? Tracker.clone(tracker) : Tracker(), super(key: key);
+  }) : tracker = tracker != null ? Tracker.clone(tracker) : Tracker(), super(key: key);
 
   final TrackerFunction onSave;
   final TrackerFunction? onDelete;
@@ -29,6 +28,78 @@ class _EditTrackerPageState extends State<EditTrackerPage> {
 
   void formChanged() {
     setState(() => enableSave = formKey.currentState!.validate());
+  }
+
+  Widget getTrackerForm() {
+    return Form(
+      key: formKey,
+      onChanged: formChanged,
+      child: ListView(
+        children: <Widget>[
+          TextFormField(
+            initialValue: widget.tracker.name,
+            decoration: const InputDecoration(
+                label: Text("Tracker name")
+            ),
+            onChanged: (value) => setState(() {
+              widget.tracker.name = value;
+            }),
+            maxLength: 30,
+            validator: (value) =>
+            value!.length > 30 ? "Name shouldn't be longer than 30 characters" :
+            value.isEmpty ? "Name shouldn't be empty" : null,
+          ),
+          TextFormField(
+            initialValue: widget.tracker.description,
+            decoration: const InputDecoration(
+                label: Text("Tracker description")
+            ),
+            onChanged: (value) => setState(() {
+              widget.tracker.description = value;
+            }),
+            maxLength: 120,
+            validator: (value) => value!.length > 120 ? "Description shouldn't be longer than 30 characters" :
+            value.isEmpty ? "Description shouldn't be empty" : null,
+            minLines: 1,
+            maxLines: 4,
+          ),
+          FormField(builder: (FormFieldState<Color> state) =>
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  const Text("Color"),
+                  TextButton(
+                    onPressed: () => {
+                      showDialog(
+                          context: context,
+                          builder: (context) => CustomColorPicker(
+                              initialColor: widget.tracker.color,
+                              onConfirm: (color) => setState(() {
+                                widget.tracker.color = color;
+                                formChanged();
+                              })
+                          )
+                      )
+                    },
+                    child:
+                    SizedBox(
+                      width: 30.0,
+                      height: 30.0,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                            color: widget.tracker.color,
+                            border: Border.all(color: Colors.black, width: 2)
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
+          )
+        ],
+      ),
+    );
   }
 
   List<Widget> getFooterButtons() {
@@ -59,74 +130,17 @@ class _EditTrackerPageState extends State<EditTrackerPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Form(
-          key: formKey,
-          onChanged: formChanged,
-          child: ListView(
-            children: <Widget>[
-              TextFormField(
-                initialValue: widget.tracker.name,
-                decoration: const InputDecoration(
-                    label: Text("Tracker name")
-                ),
-                onChanged: (value) => setState(() {
-                  widget.tracker.name = value;
-                }),
-                maxLength: 30,
-                validator: (value) =>
-                  value!.length > 30 ? "Name shouldn't be longer than 30 characters" :
-                  value.isEmpty ? "Name shouldn't be empty" : null,
-              ),
-              TextFormField(
-                initialValue: widget.tracker.description,
-                decoration: const InputDecoration(
-                    label: Text("Tracker description")
-                ),
-                onChanged: (value) => setState(() {
-                  widget.tracker.description = value;
-                }),
-                maxLength: 120,
-                validator: (value) => value!.length > 120 ? "Description shouldn't be longer than 30 characters" :
-                value.isEmpty ? "Description shouldn't be empty" : null,
-                minLines: 1,
-                maxLines: 4,
-              ),
-              FormField(builder: (FormFieldState<Color> state) =>
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    const Text("Color"),
-                    TextButton(
-                      onPressed: () => {
-                        showDialog(
-                          context: context,
-                          builder: (context) => CustomColorPicker(
-                            initialColor: widget.tracker.color,
-                            onConfirm: (color) => setState(() {
-                              widget.tracker.color = color;
-                              formChanged();
-                            })
-                          )
-                        )
-                      },
-                      child:
-                        SizedBox(
-                          width: 30.0,
-                          height: 30.0,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: widget.tracker.color,
-                              border: Border.all(color: Colors.black, width: 2)
-                            ),
-                          ),
-                        ),
-                    )
-                  ],
-                )
-              )
-            ],
-          ),
+        child: Column(
+          children: <Widget>[
+            Expanded(child: getTrackerForm()),
+            ElevatedButton(
+              onPressed: () => setState(() {
+                widget.tracker.logs.add(DateTime.now());
+              }),
+              child: const Text("Log it!")
+            )
+            // getTrackerForm()
+          ],
         )
       ),
       persistentFooterButtons: getFooterButtons(),
