@@ -32,7 +32,7 @@ class _EditTrackerPageState extends State<EditTrackerPage> {
     setState(() => enableSave = formKey.currentState!.validate());
   }
 
-  Widget getTrackerForm() {
+  Widget trackerForm() {
     return Form(
       key: formKey,
       onChanged: formChanged,
@@ -116,7 +116,7 @@ class _EditTrackerPageState extends State<EditTrackerPage> {
         );
   }
 
-  List<Widget> getFooterButtons() {
+  List<Widget> footerButtons() {
     var saveButton = TextButton(
         onPressed: enableSave? () {
           widget.onSave(widget.tracker);
@@ -155,17 +155,17 @@ class _EditTrackerPageState extends State<EditTrackerPage> {
         padding: const EdgeInsets.all(15.0),
         child: Column(
           children: <Widget>[
-            Expanded(child: getTrackerForm()),
-            getLogNowButton()
-            // getTrackerForm()
+            Expanded(child: trackerForm()),
+
+            logNowButton()
           ],
         )
       ),
-      persistentFooterButtons: getFooterButtons(),
+      persistentFooterButtons: footerButtons(),
     );
   }
 
-  ElevatedButton getLogNowButton() {
+  ElevatedButton logNowButton() {
     return ElevatedButton(
       onPressed: () => confirmationDialog(
           context: context,
